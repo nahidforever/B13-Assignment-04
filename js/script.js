@@ -54,7 +54,6 @@ calculateCount();
 mainContainer.addEventListener("click", function (event) {
   if (event.target.classList.contains("btn-success")) {
     const parenNode = event.target.parentNode.parentNode;
-    console.log(parenNode);
 
     const companyName = parenNode.querySelector(".companyName").innerText;
     const position = parenNode.querySelector(".position").innerText;
@@ -90,7 +89,6 @@ mainContainer.addEventListener("click", function (event) {
     renderInterview();
   } else if (event.target.classList.contains("btn-error")) {
     const parenNode = event.target.parentNode.parentNode;
-    console.log(parenNode);
 
     const companyName = parenNode.querySelector(".companyName").innerText;
     const position = parenNode.querySelector(".position").innerText;
@@ -124,6 +122,23 @@ mainContainer.addEventListener("click", function (event) {
 
     calculateCount();
     renderRejected();
+  } else if (event.target.closest(".btn.rounded-full")) {
+
+    const card = event.target.closest(".cardContainer");
+
+    const companyName = card.querySelector(".companyName").innerText;
+    const position = card.querySelector(".position").innerText;
+
+    card.remove();
+
+    interviewList = interviewList.filter(
+      (job) => job.companyName !== companyName && job.position !== position,
+    );
+    rejectedList = rejectedList.filter(
+      (job) => job.companyName !== companyName && job.position !== position,
+    );
+
+    calculateCount();
   }
 });
 
@@ -140,7 +155,7 @@ function renderInterview() {
   for (let interview of interviewList) {
     let div = document.createElement("div");
     div.className =
-      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7";
+      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
 
     div.innerHTML = `
       <div>
@@ -201,7 +216,7 @@ function renderRejected() {
   for (let reject of rejectedList) {
     let div = document.createElement("div");
     div.className =
-      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7";
+      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
 
     div.innerHTML = `
       <div>
