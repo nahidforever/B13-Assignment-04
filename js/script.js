@@ -208,7 +208,7 @@ function renderInterview() {
   for (let interview of interviewList) {
     let div = document.createElement("div");
     div.className =
-      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
+      "cardSection flex flex-col gap-10 md:flex-row justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
 
     div.innerHTML = `
       <div>
@@ -219,7 +219,7 @@ function renderInterview() {
                 ${interview.position}
               </p>
 
-              <div class="text-gray-500 my-5 flex gap-2">
+              <div class="text-gray-500 my-5 flex flex-col gap-4 md:flex-row md:gap-2">
                 <p class="location"> ${interview.location}</p>
                 <p class="type">${interview.type}</p>
                 <p class="salary">${interview.salary}</p>
@@ -269,7 +269,7 @@ function renderRejected() {
   for (let reject of rejectedList) {
     let div = document.createElement("div");
     div.className =
-      "cardSection flex justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
+      "cardSection flex flex-col gap-10 md:flex-row justify-between bg-base-100 p-6 rounded-lg mb-5 mt-7 cardContainer";
 
     div.innerHTML = `
       <div>
@@ -280,7 +280,7 @@ function renderRejected() {
                 ${reject.position}
               </p>
 
-              <div class="text-gray-500 my-5 flex gap-2">
+              <div class="text-gray-500 my-5 flex flex-col gap-4 md:flex-row md:gap-2">
                 <p class="location"> ${reject.location}</p>
                 <p class="type">${reject.type}</p>
                 <p class="salary">${reject.salary}</p>
