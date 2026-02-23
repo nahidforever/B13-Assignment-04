@@ -19,6 +19,24 @@ function calculateCount() {
   total.innerText = allCardSection.children.length;
   interviewCount.innerText = interviewList.length;
   rejectedCount.innerText = rejectedList.length;
+  tabJobCount();
+}
+
+function tabJobCount() {
+  const countElement = document.querySelector(
+    ".flex.justify-between p.text-gray-500",
+  );
+
+  const totalJobs = allCardSection.children.length;
+
+  if (allTabBtn.classList.contains("bg-[#3B82F6]")) {
+    countElement.innerText = totalJobs + " jobs";
+  } else if (interviewTabBtn.classList.contains("bg-[#3B82F6]")) {
+    countElement.innerText =
+      interviewList.length + " of " + totalJobs + " jobs";
+  } else if (rejectedTabBtn.classList.contains("bg-[#3B82F6]")) {
+    countElement.innerText = rejectedList.length + " of " + totalJobs + " jobs";
+  }
 }
 
 function toggleStyle(id) {
@@ -47,6 +65,8 @@ function toggleStyle(id) {
     filterSection.classList.remove("hidden");
     renderRejected();
   }
+
+  tabJobCount();
 }
 
 calculateCount();
@@ -63,7 +83,14 @@ mainContainer.addEventListener("click", function (event) {
     const jobStatus = parenNode.querySelector(".jobStatus").innerText;
     const description = parenNode.querySelector(".description").innerText;
 
-    parenNode.querySelector(".jobStatus").innerText = "INTERVIEW";
+    rejectedList = rejectedList.filter(
+      (job) => !(job.companyName === companyName && job.position === position),
+    );
+
+    const statusElement = parenNode.querySelector(".jobStatus");
+    statusElement.innerText = "INTERVIEW";
+    statusElement.className =
+      "jobStatus px-3 py-2 text-[14px] rounded border bg-green-100 text-green-500 border-green-400 font-[600]";
 
     const CardInfo = {
       companyName,
@@ -86,7 +113,13 @@ mainContainer.addEventListener("click", function (event) {
     }
 
     calculateCount();
-    renderInterview();
+
+    if (interviewTabBtn.classList.contains("bg-[#3B82F6]")) {
+      renderInterview();
+    }
+    if (rejectedTabBtn.classList.contains("bg-[#3B82F6]")) {
+      renderRejected();
+    }
   } else if (event.target.classList.contains("btn-error")) {
     const parenNode = event.target.parentNode.parentNode;
 
@@ -98,7 +131,14 @@ mainContainer.addEventListener("click", function (event) {
     const jobStatus = parenNode.querySelector(".jobStatus").innerText;
     const description = parenNode.querySelector(".description").innerText;
 
-    parenNode.querySelector(".jobStatus").innerText = "REJECTED";
+    interviewList = interviewList.filter(
+      (job) => !(job.companyName === companyName && job.position === position),
+    );
+
+    const statusElement = parenNode.querySelector(".jobStatus");
+    statusElement.innerText = "REJECTED";
+    statusElement.className =
+      "jobStatus px-3 py-2 text-[14px] rounded border bg-red-100 text-red-500 border-red-400 font-[600]";
 
     const CardInfo = {
       companyName,
@@ -121,9 +161,14 @@ mainContainer.addEventListener("click", function (event) {
     }
 
     calculateCount();
-    renderRejected();
-  } else if (event.target.closest(".btn.rounded-full")) {
 
+    if (interviewTabBtn.classList.contains("bg-[#3B82F6]")) {
+      renderInterview();
+    }
+    if (rejectedTabBtn.classList.contains("bg-[#3B82F6]")) {
+      renderRejected();
+    }
+  } else if (event.target.closest(".btn.rounded-full")) {
     const card = event.target.closest(".cardContainer");
 
     const companyName = card.querySelector(".companyName").innerText;
@@ -132,15 +177,23 @@ mainContainer.addEventListener("click", function (event) {
     card.remove();
 
     interviewList = interviewList.filter(
-      (job) => job.companyName !== companyName && job.position !== position,
+      (job) => job.companyName !== companyName || job.position !== position,
     );
     rejectedList = rejectedList.filter(
-      (job) => job.companyName !== companyName && job.position !== position,
+      (job) => job.companyName !== companyName || job.position !== position,
     );
-
-    calculateCount();
   }
+
+  calculateCount();
 });
+
+function getStatusClass(status) {
+  if (status == "INTERVIEW") {
+    return "jobStatus px-3 py-2 text-[14px] rounded border bg-green-100 text-green-500 border-green-400 font-[600]";
+  } else {
+    return "jobStatus px-3 py-2 text-[14px] rounded border bg-red-100 text-red-500 border-red-400 font-[600]";
+  }
+}
 
 function renderInterview() {
   filterSection.innerHTML = "";
@@ -167,14 +220,14 @@ function renderInterview() {
               </p>
 
               <div class="text-gray-500 my-5 flex gap-2">
-                <p class="location"> ${interview.location} •</p>
-                <p class="type">${interview.type} •</p>
+                <p class="location"> ${interview.location}</p>
+                <p class="type">${interview.type}</p>
                 <p class="salary">${interview.salary}</p>
               </div>
 
               <div>
                 <span
-                  class="jobStatus bg-[#EEF4FF] text-[14px] text-[#002C5C] px-3 py-2"
+                  class="${getStatusClass(interview.jobStatus)}"
                   >${interview.jobStatus}</span
                 >
               </div>
@@ -228,14 +281,14 @@ function renderRejected() {
               </p>
 
               <div class="text-gray-500 my-5 flex gap-2">
-                <p class="location"> ${reject.location} •</p>
-                <p class="type">${reject.type} •</p>
+                <p class="location"> ${reject.location}</p>
+                <p class="type">${reject.type}</p>
                 <p class="salary">${reject.salary}</p>
               </div>
 
               <div>
                 <span
-                  class="jobStatus bg-[#EEF4FF] text-[14px] text-[#002C5C] px-3 py-2"
+                  class="${getStatusClass(reject.jobStatus)}"
                   >${reject.jobStatus}</span
                 >
               </div>
